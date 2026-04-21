@@ -1,0 +1,1 @@
+(()=>{window.$=jQuery.noConflict();$(function(){$("#faqs_add_form"+" input").validator({events:"blur change"})})})();
