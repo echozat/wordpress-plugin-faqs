@@ -15,21 +15,22 @@ class AdminSetup
 
     public function init()
     {
-        $this->fileInlcudes();
+        $this->fileIncludes();
 
         add_action('admin_menu', [$this, 'menuItems']);
 
         add_action('init', [$this, 'userFiles']);
     }
 
-    public function fileInlcudes()
+    public function fileIncludes()
     {
-        require_once FAQS_PLUGIN_DIR . '/includes/post-requests.php';
-        require_once FAQS_PLUGIN_DIR . '/includes/faqs-data.php';
-        require_once FAQS_PLUGIN_DIR . '/includes/faqs-listtable.php';
-        require_once FAQS_PLUGIN_DIR . '/includes/faqs-question-listtable.php';
-        require_once FAQS_PLUGIN_DIR . '/includes/faqs-helper.php';
-        require_once FAQS_PLUGIN_DIR . '/includes/faqs-methods.php';
+        Core::load('modules/post-requests.php');
+        Core::load('modules/faqs-data.php');
+        Core::load('modules/faqs-listtable.php');
+        Core::load('modules/faqs-question-listtable.php');
+        Core::load('modules/faqs-helper.php');
+        Core::load('modules/faqs-methods.php');
+
     }
 
     public function menuItems()
@@ -77,41 +78,41 @@ class AdminSetup
 
     public function pageDashboard()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-dashboard.php';
+        Core::load('admin/views/admin-dashboard.php');
     }
 
     public function pageCreateFaqs()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-create-faqs.php';
+        Core::load('admin/views/admin-create-faqs.php');
     }
 
     public function pageAddQuestion()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-add-question.php';
+        Core::load('admin/views/admin-add-question.php');
     }
 
     public function pageEditQuestion()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-edit-question.php';
+        Core::load('admin/views/admin-edit-question.php');
     }
 
     public function pageEditFaqs()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-edit-faq.php';
+        Core::load('admin/views/admin-edit-faq.php');
     }
 
     public function pageAllFAQs()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-all-faqs.php';
+        Core::load('admin/views/admin-all-faqs.php');
     }
 
     public function pageSingleFAQs()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-view-faqs.php';
+        Core::load('admin/views/admin-view-faqs.php');
     }
 
     public function pageCategories()
     {
-        require_once FAQS_PLUGIN_DIR . '/pages/admin-categories.php';
+        Core::load('admin/views/admin-categories.php');
     }
 }

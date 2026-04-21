@@ -1,4 +1,5 @@
 <?php
+namespace faqs;
 
 if (version_compare(PHP_VERSION, '5.2', '<')) {
     if (is_admin() && (! defined('DOING_AJAX') || ! DOING_AJAX)) {
@@ -30,17 +31,18 @@ if (! defined('FAQS_LOAD_CSS')) {
     define('FAQS_LOAD_CSS', true);
 }
 
-faqs\Core::load('core/plugin-setup.php');
-// faqs\Core::load('modules/faqs.php');
-// Core::load('modules/faqs-admin.php');
+Core::load('core/plugin-setup.php');
 
 register_activation_hook(FAQ_FILE_PATH, ['faqs\PluginSetup', 'activate']);
 register_deactivation_hook(FAQ_FILE_PATH, ['faqs\PluginSetup', 'deactivate']);
 
-// add_action('plugins_loaded', 'FAQsStart');
+if (is_admin()) {
 
-// function FAQsStart()
-// {
-//     $initObj = faqs\FAQSAdmin::get_instance();
-//     $initObj->init();
-// }
+    Core::load('admin/classes/admin-setup.php');
+
+    add_action('plugins_loaded', function () {
+        $initObj = AdminSetup::get_instance();
+        $initObj->init();
+    });
+
+}
