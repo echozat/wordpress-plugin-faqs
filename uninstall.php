@@ -4,8 +4,8 @@ if (! defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
-require_once FAQS_PLUGIN_DIR . '/includes/faqs-install.php';
+require_once FAQS_PATH . 'src/core/plugin-setup.php';
 
-if (class_exists('FAQS_Install') && method_exists('FAQS_Install', 'delete')) {
-    FAQS_Install::delete();
+if (class_exists('faqs\PluginSetup') && method_exists('faqs\PluginSetup', 'delete')) {
+    faqs\PluginSetup::delete();
 }
