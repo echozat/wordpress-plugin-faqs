@@ -37,6 +37,7 @@ register_activation_hook(FAQ_FILE_PATH, ['faqs\PluginSetup', 'activate']);
 register_deactivation_hook(FAQ_FILE_PATH, ['faqs\PluginSetup', 'deactivate']);
 
 if (is_admin()) {
+    // load admin setup
 
     Core::load('admin/classes/admin-setup.php');
 
@@ -45,4 +46,12 @@ if (is_admin()) {
         $initObj->init();
     });
 
+} else {
+    // load public setup
+    Core::load('public/classes/public-setup.php');
+
+    add_action('plugins_loaded', function () {
+        $initObj = PublicSetup::get_instance();
+        $initObj->init();
+    });
 }

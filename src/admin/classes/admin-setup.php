@@ -61,10 +61,9 @@ class AdminSetup
     {
         if (is_admin()) {
             wp_enqueue_media();
-            wp_enqueue_script('faqs-ajax-request', plugins_url('faqs/assets/js/faqs-admin.js'), ['jquery'], false, true);
-            wp_enqueue_script('faqs-think201-validator', plugins_url('faqs/assets/js/think201-validator.js'), ['jquery'], false, true);
+            wp_enqueue_script('faqs-admin', FAQ_PLUGIN_URL . 'build/js/admin.js', ['jquery'], false, true);
             wp_localize_script('faqs-ajax-request', 'FAQSAjax', ['ajaxurl' => plugins_url('admin-ajax.php')]);
-            wp_enqueue_style('faqs-css', plugins_url('faqs/assets/css/faqs.css'), [], FAQS_VERSION, 'all');
+            wp_enqueue_style('faqs-admin', FAQ_PLUGIN_URL . 'build/css/admin.css', [], FAQS_VERSION, 'all');
         }
     }
 
