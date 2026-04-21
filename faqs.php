@@ -24,6 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @package Main
  */
 
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 //start session
 if (session_id() == '') {
     session_start();
