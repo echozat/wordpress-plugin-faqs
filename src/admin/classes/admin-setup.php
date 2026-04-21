@@ -19,7 +19,6 @@ class AdminSetup
 
         add_action('admin_menu', [$this, 'menuItems']);
 
-        add_action('init', [$this, 'userFiles']);
     }
 
     public function fileIncludes()
@@ -64,14 +63,6 @@ class AdminSetup
             wp_enqueue_script('faqs-admin', FAQ_PLUGIN_URL . 'build/js/admin.js', ['jquery'], false, true);
             wp_localize_script('faqs-ajax-request', 'FAQSAjax', ['ajaxurl' => plugins_url('admin-ajax.php')]);
             wp_enqueue_style('faqs-admin', FAQ_PLUGIN_URL . 'build/css/admin.css', [], FAQS_VERSION, 'all');
-        }
-    }
-
-    public function userFiles()
-    {
-        if (! is_admin()) {
-            wp_enqueue_style('faqs-usercss', plugins_url('faqs/assets/css/faqs-user.css'), [], FAQS_VERSION, 'all');
-            wp_enqueue_script('faqs-userjs', plugins_url('faqs/assets/js/faqs-user.js'), ['jquery'], false, true);
         }
     }
 
