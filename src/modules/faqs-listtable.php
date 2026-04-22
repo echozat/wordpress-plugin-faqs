@@ -226,7 +226,12 @@
                     foreach ($items as $key => $item) {
                         $item->name = '<a href="' . admin_url('admin.php?page=faqs-view-faqs&faqsid=' . $item->id) . '">' . $item->name . '</a>';
 
-                        $item->function = ' if(function_exists("faqs_getAll")) { faqs_getAll(' . $item->id . ', array("accordion" => true)); } ';
+                        $item->function = '';
+                        if (function_exists('faqs_getAll')) {
+                            ob_start();
+                            faqs_getAll((int) $item->id, ['accordion' => true]);
+                            $item->function = ob_get_clean();
+                        }
 
                         $item->edit = '<a href="' . admin_url('admin.php?page=faqs-edit-faq&faqsid=' . $item->id) . '">Edit</a>';
 

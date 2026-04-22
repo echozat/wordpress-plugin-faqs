@@ -45,4 +45,6 @@ var Think201WP = {
   }
 };
 
+window.Think201WP = Think201WP;
+
 

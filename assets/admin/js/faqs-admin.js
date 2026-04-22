@@ -10,11 +10,17 @@ var Validator = {
 
     check: function(FormObj)
     {
+        if (typeof $.fn.validator !== 'function') {
+            return true;
+        }
         return FormObj.validator('checkform', FormObj);
     },
 
     set: function(FormId)
     {
+        if (typeof $.fn.validator !== 'function') {
+            return;
+        }
         $(FormId+' input').validator({events   : 'blur change'});
     },
 
@@ -24,3 +30,5 @@ var Validator = {
 $(function() {
     Validator.set('#faqs_add_form');
 });
+
+window.Validator = Validator;
