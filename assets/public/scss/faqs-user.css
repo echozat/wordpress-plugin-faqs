@@ -14,9 +14,9 @@
         height: 100%;
         background-repeat: no-repeat; }
       .faqs-accordian-sec .faqs-accordian-section .faqs-header .faq-arrow-right {
-        background-image: url("../img/arrow-right.png"); }
+        background-image: url("../../admin/images/arrow-right.png"); }
       .faqs-accordian-sec .faqs-accordian-section .faqs-header .faq-arrow-down {
-        background-image: url("../img/arrow-down.png"); }
+        background-image: url("../../admin/images/arrow-down.png"); }
       .faqs-accordian-sec .faqs-accordian-section .faqs-header h4 {
         font-family: roboto;
         font-size: 16px;

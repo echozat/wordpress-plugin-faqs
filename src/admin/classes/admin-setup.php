@@ -59,6 +59,7 @@ class AdminSetup
     public function adminScriptStyles()
     {
         if (is_admin()) {
+            #
             wp_enqueue_media();
             wp_enqueue_script('faqs-admin', FAQ_PLUGIN_URL . 'build/js/admin.js', ['jquery'], false, true);
             wp_localize_script('faqs-ajax-request', 'FAQSAjax', ['ajaxurl' => plugins_url('admin-ajax.php')]);

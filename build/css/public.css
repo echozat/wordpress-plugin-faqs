@@ -1,3 +1,64 @@
+.faqs-accordian-sec {
+  background-color: #ffffff; }
+  .faqs-accordian-sec .faqs-accordian-section {
+    border: 1px solid #dddddd;
+    margin: 20px 0; }
+    .faqs-accordian-sec .faqs-accordian-section .faqs-header {
+      background-color: #f2f2f2;
+      border-bottom: 1px solid #dddddd;
+      cursor: pointer;
+      padding: 1px 10px; }
+      .faqs-accordian-sec .faqs-accordian-section .faqs-header .faq-arrow {
+        width: 100%;
+        padding-right: 20px;
+        height: 100%;
+        background-repeat: no-repeat; }
+      .faqs-accordian-sec .faqs-accordian-section .faqs-header .faq-arrow-right {
+        background-image: url(../images/arrow-right.png); }
+      .faqs-accordian-sec .faqs-accordian-section .faqs-header .faq-arrow-down {
+        background-image: url(../images/arrow-down.png); }
+      .faqs-accordian-sec .faqs-accordian-section .faqs-header h4 {
+        font-family: roboto;
+        font-size: 16px;
+        color: #666666;
+        text-align: left; }
+      .faqs-accordian-sec .faqs-accordian-section .faqs-header > h3 {
+        margin: 0;
+        font-size: 1.1em; }
+    .faqs-accordian-sec .faqs-accordian-section .active {
+      display: block !important; }
+    .faqs-accordian-sec .faqs-accordian-section .faqs-content {
+      display: none;
+      padding: 20px 10px;
+      text-align: left; }
+      .faqs-accordian-sec .faqs-accordian-section .faqs-content p {
+        font-size: 1rem;
+        line-height: 1.8em; }
+    .faqs-accordian-sec .faqs-accordian-section .faq-strip {
+      margin: 20px 0 30px;
+      width: 100%; }
+
+.faqs-faq-strip {
+  margin: 20px 0 30px;
+  width: 100%; }
+  .faqs-faq-strip ul {
+    display: table;
+    margin: auto;
+    list-style: none;
+    padding: 0; }
+    .faqs-faq-strip ul li {
+      float: left;
+      margin: 0 30px; }
+      .faqs-faq-strip ul li a {
+        background-color: #8c8c8c;
+        border-radius: 4px;
+        color: #ffffff;
+        padding: 6px 24px;
+        transition-duration: 500ms; }
+        .faqs-faq-strip ul li a:hover {
+          color: #e03e38;
+          transition-duration: 500ms; }
+
 .t201plugin .tbox {
   margin: 20px 0;
   overflow: auto;

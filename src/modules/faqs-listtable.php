@@ -1,24 +1,23 @@
 <?php
-namespace faqs;
+    namespace faqs;
 
-if(!class_exists('\WP_List_Table'))
-{
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
-}
+    if (! class_exists('\WP_List_Table')) {
+    require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+    }
 
-class FaqsListTable extends \WP_List_Table
-{
+    class FaqsListTable extends \WP_List_Table
+    {
     private $order;
     private $orderby;
     private $items_per_page = 10;
 
     public function __construct()
     {
-        parent :: __construct( array(
+        parent::__construct([
             'singular' => 'faq',
             'plural'   => 'faqs',
-            'ajax'     => true
-        ) );
+            'ajax'     => true,
+        ]);
 
         $this->set_order();
         $this->set_orderby();
@@ -29,11 +28,11 @@ class FaqsListTable extends \WP_List_Table
     {
         global $wpdb;
 
-        $faqs_details = $wpdb->prefix.'faqs_details';
+        $faqs_details = $wpdb->prefix . 'faqs_details';
 
-        $args = array( 'id', 'name', 'icon');
-        
-        $sql_select = implode( ', ', $args );
+        $args = ['id', 'name', 'icon'];
+
+        $sql_select = implode(', ', $args);
 
         $query = "SELECT $sql_select
                   FROM $faqs_details
@@ -47,33 +46,37 @@ class FaqsListTable extends \WP_List_Table
     public function set_order()
     {
         $order = 'ASC';
-        if ( isset( $_GET['order'] ) AND $_GET['order'] )
+        if (isset($_GET['order']) and $_GET['order']) {
             $order = $_GET['order'];
-        $this->order = esc_sql( $order );
+        }
+
+        $this->order = esc_sql($order);
     }
 
     public function set_orderby()
     {
         $orderby = 'created_at';
-        if ( isset( $_GET['orderby'] ) AND $_GET['orderby'] )
+        if (isset($_GET['orderby']) and $_GET['orderby']) {
             $orderby = $_GET['orderby'];
-        $this->orderby = esc_sql( $orderby );
+        }
+
+        $this->orderby = esc_sql($orderby);
     }
 
     /**
      * @see WP_List_Table::ajax_user_can()
      */
-    public function ajax_user_can() 
+    public function ajax_user_can()
     {
-        return current_user_can( 'edit_posts' );
+        return current_user_can('edit_posts');
     }
 
     /**
      * @see WP_List_Table::no_items()
      */
-    public function no_items() 
+    public function no_items()
     {
-        _e( 'No Faqs found.' );
+        _e('No Faqs found.');
     }
 
     /**
@@ -81,23 +84,23 @@ class FaqsListTable extends \WP_List_Table
      */
     public function get_views()
     {
-        return array();
-    } 
+        return [];
+    }
 
     /**
      * @see WP_List_Table::get_columns()
      */
     public function get_columns()
     {
-        $columns = array(
-            'id'         => __( 'ID' ),
-            'name' 			 => __( 'Name' ),
+        $columns = [
+            'id'       => __('ID'),
+            'name'     => __('Name'),
             //'icon'       => __( 'Icon' ),
-            'function'   => __( 'Function' ),
-            'edit'   => __( 'Edit' )
-        );
+            'function' => __('Function'),
+            'edit'     => __('Edit'),
+        ];
 
-        return $columns;        
+        return $columns;
     }
 
     /**
@@ -105,19 +108,19 @@ class FaqsListTable extends \WP_List_Table
      */
     public function get_sortable_columns()
     {
-        $sortable = array(
-            'id'     => array( 'id', true ),
-            'name'     => array( 'name', true )
-        );
+        $sortable = [
+            'id'   => ['id', true],
+            'name' => ['name', true],
+        ];
 
         return $sortable;
     }
 
     public function get_hidden_columns()
     {
-    		$hidden   = array();
+        $hidden = [];
 
-    		return $hidden;
+        return $hidden;
     }
 
     /**
@@ -126,43 +129,43 @@ class FaqsListTable extends \WP_List_Table
      */
     public function prepare_items()
     {
-        $columns  = $this->get_columns();
+        $columns = $this->get_columns();
 
-        $hidden   = $this->get_hidden_columns();
+        $hidden = $this->get_hidden_columns();
 
         $sortable = $this->get_sortable_columns();
 
-        $this->_column_headers = array($columns, $hidden, $sortable);
+        $this->_column_headers = [$columns, $hidden, $sortable];
 
         // SQL results
         $posts = $this->get_sql_results();
 
-        empty( $posts ) AND $posts = array();
+        empty($posts) and $posts = [];
 
         # >>>> Pagination
-        $per_page     = $this->items_per_page;
+        $per_page = $this->items_per_page;
 
         $current_page = $this->get_pagenum();
 
-        $total_items  = count($posts);
+        $total_items = count($posts);
 
-        $this->set_pagination_args( array (
+        $this->set_pagination_args([
             'total_items' => $total_items,
             'per_page'    => $per_page,
-            'total_pages' => ceil( $total_items / $per_page )
-        ) );
+            'total_pages' => ceil($total_items / $per_page),
+        ]);
 
-        $last_post = $current_page * $per_page;
-        $first_post = $last_post - $per_page + 1;
-        $last_post > $total_items AND $last_post = $total_items;
+        $last_post                               = $current_page * $per_page;
+        $first_post                              = $last_post - $per_page + 1;
+        $last_post > $total_items and $last_post = $total_items;
 
-        // Setup the range of keys/indizes that contain 
+        // Setup the range of keys/indizes that contain
         // the posts on the currently displayed page(d).
         // Flip keys with values as the range outputs the range in the values.
-        $range = array_flip( range( $first_post - 1, $last_post - 1, 1 ) );
+        $range = array_flip(range($first_post - 1, $last_post - 1, 1));
 
         // Filter out the posts we're not displaying on the current page.
-        $posts_array = array_intersect_key( $posts, $range );
+        $posts_array = array_intersect_key($posts, $range);
         # <<<< Pagination
 
         $processData = $this->process_items($posts_array);
@@ -173,7 +176,7 @@ class FaqsListTable extends \WP_List_Table
     /**
      * A single column
      */
-    public function column_default( $item, $column_name )
+    public function column_default($item, $column_name)
     {
         return $item->$column_name;
     }
@@ -181,57 +184,56 @@ class FaqsListTable extends \WP_List_Table
     /**
      * Override of table nav to avoid breaking with bulk actions & according nonce field
      */
-    public function display_tablenav( $which ) 
+    public function display_tablenav($which)
     {
         ?>
-        <div class="tablenav <?php echo esc_attr( $which ); ?>">
-            <!-- 
+        <div class="tablenav <?php echo esc_attr($which); ?>">
+            <!--
             <div class="alignleft actions">
                 <?php # $this->bulk_actions( $which ); ?>
             </div>
              -->
             <?php
-            $this->extra_tablenav( $which );
-            $this->pagination( $which );
-            ?>
+                $this->extra_tablenav($which);
+                        $this->pagination($which);
+                    ?>
             <br class="clear" />
         </div>
         <?php
-    }
+            }
 
-    /**
-     * Disables the views for 'side' context as there's not enough free space in the UI
-     * Only displays them on screen/browser refresh. Else we'd have to do this via an AJAX DB update.
-     * 
-     * @see WP_List_Table::extra_tablenav()
-     */
-    public function extra_tablenav( $which )
-    {
-        global $wp_meta_boxes;
-        $views = $this->get_views();
-        if ( empty( $views ) )
-            return;
+                /**
+                 * Disables the views for 'side' context as there's not enough free space in the UI
+                 * Only displays them on screen/browser refresh. Else we'd have to do this via an AJAX DB update.
+                 *
+                 * @see WP_List_Table::extra_tablenav()
+                 */
+                public function extra_tablenav($which)
+                {
+                    global $wp_meta_boxes;
+                    $views = $this->get_views();
+                    if (empty($views)) {
+                        return;
+                    }
 
-        $this->views();
-    }
+                    $this->views();
+                }
 
-    public function process_items($items)
-    {
-		$process_items = array();
+                public function process_items($items)
+                {
+                    $process_items = [];
 
-		foreach($items as $key => $item)
-		{
-            $item->name = '<a href="'.admin_url('admin.php?page=faqs-view-faqs&faqsid='.$item->id).'">'.$item->name.'</a>';
+                    foreach ($items as $key => $item) {
+                        $item->name = '<a href="' . admin_url('admin.php?page=faqs-view-faqs&faqsid=' . $item->id) . '">' . $item->name . '</a>';
 
-            $item->function = ' if(function_exists("faqs_getAll")) { faqs_getAll('. $item->id .', array("accordion" => true)); } ';
-            //$item->icon = '<img alt="icon" src="'.$item->icon.'" class="icon-icon">';
+                        $item->function = ' if(function_exists("faqs_getAll")) { faqs_getAll(' . $item->id . ', array("accordion" => true)); } ';
 
-            $item->edit = '<a href="'.admin_url('admin.php?page=faqs-edit-faq&faqsid='.$item->id).'">Edit</a>';
+                        $item->edit = '<a href="' . admin_url('admin.php?page=faqs-edit-faq&faqsid=' . $item->id) . '">Edit</a>';
 
-            $process_items[$key] = $item;
-		}
+                        $process_items[$key] = $item;
+                    }
 
-		return $process_items;
-    }
-}
-?>
+                    return $process_items;
+                }
+        }
+        ?>
