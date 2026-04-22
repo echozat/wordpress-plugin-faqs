@@ -28,7 +28,7 @@ class PublicSetup
         Core::load('modules/faqs-question-listtable.php');
         Core::load('modules/faqs-helper.php');
         Core::load('modules/faqs-methods.php');
-
+        Core::load('modules/shortcodes/faqs-shortcodes.php');
     }
 
     public function scripts()
