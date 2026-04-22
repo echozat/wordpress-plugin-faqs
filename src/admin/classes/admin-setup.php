@@ -26,6 +26,7 @@ class AdminSetup
         Core::load('modules/post-requests.php');
         Core::load('modules/faqs-data.php');
         Core::load('modules/faqs-listtable.php');
+        Core::load('modules/faqs-categories-listtable.php');
         Core::load('modules/faqs-question-listtable.php');
         Core::load('modules/faqs-helper.php');
         Core::load('modules/faqs-methods.php');
@@ -62,6 +63,7 @@ class AdminSetup
             #
             wp_enqueue_media();
             wp_enqueue_script('faqs-admin', FAQ_PLUGIN_URL . 'build/js/admin.js', ['jquery'], false, true);
+            wp_enqueue_script('faqs-think201-wp', FAQ_PLUGIN_URL . 'assets/admin/js/think201-wp.js', ['jquery', 'faqs-admin'], FAQS_VERSION, true);
             wp_localize_script('faqs-ajax-request', 'FAQSAjax', ['ajaxurl' => plugins_url('admin-ajax.php')]);
             wp_enqueue_style('faqs-admin', FAQ_PLUGIN_URL . 'build/css/admin.css', [], FAQS_VERSION, 'all');
         }

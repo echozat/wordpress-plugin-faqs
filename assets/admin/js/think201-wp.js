@@ -25,9 +25,12 @@ var Think201WP = {
       {
         if (data.status == true) 
         {
-          console.log('success');
           $('.think201-wp-msg-success p').html(data.msg);
           $('.think201-wp-msg-success').fadeIn(1000).siblings('.think201-wp-msg').hide();
+          if ($(FormId).find('input[name="action"]').val() === 'page_add_new_category') {
+            setTimeout(function() { window.location.reload(); }, 250);
+            return;
+          }
           $(FormId)[0].reset();
         } 
         else 
@@ -38,7 +41,7 @@ var Think201WP = {
       },
       error: function() 
       {
-        $('.think201-wp-msg-error p').html(data.msg);
+        $('.think201-wp-msg-error p').html('Oops, there seems to be some issue.');
         $('.think201-wp-msg-error').fadeIn(1000).siblings('.think201-wp-msg').hide();
       }                        
     }); 
