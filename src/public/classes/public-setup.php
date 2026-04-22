@@ -15,19 +15,19 @@ class PublicSetup
 
     public function init()
     {
-        // $this->fileIncludes();
+        $this->fileIncludes();
 
         add_action('init', [$this, 'scripts']);
     }
 
     public function fileIncludes()
     {
-        // Core::load('modules/post-requests.php');
-        // Core::load('modules/faqs-data.php');
-        // Core::load('modules/faqs-listtable.php');
-        // Core::load('modules/faqs-question-listtable.php');
-        // Core::load('modules/faqs-helper.php');
-        // Core::load('modules/faqs-methods.php');
+        Core::load('modules/post-requests.php');
+        Core::load('modules/faqs-data.php');
+        Core::load('modules/faqs-listtable.php');
+        Core::load('modules/faqs-question-listtable.php');
+        Core::load('modules/faqs-helper.php');
+        Core::load('modules/faqs-methods.php');
 
     }
 
