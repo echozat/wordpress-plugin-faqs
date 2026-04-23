@@ -9,6 +9,7 @@
     {
     private $order;
     private $orderby;
+    private $search         = '';
     private $items_per_page = 10;
 
     public function __construct()
@@ -21,6 +22,7 @@
 
         $this->set_order();
         $this->set_orderby();
+        $this->set_search();
         $this->prepare_items();
     }
 
@@ -34,10 +36,11 @@
 
         $sql_select = implode(', ', $args);
 
-        $query = "SELECT $sql_select
-                  FROM $faqs_details
-                  WHERE status = 1
-               	  ORDER BY $this->orderby $this->order ";
+        $query = "SELECT $sql_select FROM $faqs_details WHERE status = 1";
+        if ($this->search !== '') {
+            $query .= $wpdb->prepare(' AND name LIKE %s', '%' . $wpdb->esc_like($this->search) . '%');
+        }
+        $query .= " ORDER BY $this->orderby $this->order";
 
         $sql_results = $wpdb->get_results($query);
 
@@ -46,22 +49,20 @@
 
     public function set_order()
     {
-        $order = 'ASC';
-        if (isset($_GET['order']) and $_GET['order']) {
-            $order = $_GET['order'];
-        }
-
-        $this->order = esc_sql($order);
+        $order       = (isset($_GET['order']) && $_GET['order']) ? strtoupper(sanitize_text_field(wp_unslash($_GET['order']))) : 'ASC';
+        $this->order = in_array($order, ['ASC', 'DESC'], true) ? $order : 'ASC';
     }
 
     public function set_orderby()
     {
-        $orderby = 'created_at';
-        if (isset($_GET['orderby']) and $_GET['orderby']) {
-            $orderby = $_GET['orderby'];
-        }
+        $orderby       = (isset($_GET['orderby']) && $_GET['orderby']) ? sanitize_text_field(wp_unslash($_GET['orderby'])) : 'created_at';
+        $allowed       = ['id', 'name', 'created_at'];
+        $this->orderby = in_array($orderby, $allowed, true) ? $orderby : 'created_at';
+    }
 
-        $this->orderby = esc_sql($orderby);
+    public function set_search()
+    {
+        $this->search = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
     }
 
     /**
@@ -235,8 +236,8 @@
                             $item->function = ob_get_clean();
                         }
 
-                        $item->edit = '<a href="' . admin_url('admin.php?page=faqs-edit-faq&faqsid=' . $item->id) . '">Edit</a>';
-            $item->delete = '<a href="#" class="submitdelete faqs-delete-faq" data-faqsid="' . (int) $item->id . '" data-nonce="' . esc_attr(wp_create_nonce('faqs_delete_' . (int) $item->id)) . '">Delete</a>';
+                        $item->edit   = '<a href="' . admin_url('admin.php?page=faqs-edit-faq&faqsid=' . $item->id) . '">Edit</a>';
+                        $item->delete = '<a href="#" class="submitdelete faqs-delete-faq" data-faqsid="' . (int) $item->id . '" data-nonce="' . esc_attr(wp_create_nonce('faqs_delete_' . (int) $item->id)) . '">Delete</a>';
 
                         $process_items[$key] = $item;
                     }

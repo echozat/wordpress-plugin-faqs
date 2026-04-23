@@ -15,9 +15,10 @@ $wp_list_table = new faqs\FAQsListTable();
         <p>Oops, there seems to be some issue.</p>
     </div>
 
-   
-<?php
-$wp_list_table->display();
-?>
+    <form method="get">
+        <input type="hidden" name="page" value="faqs-all-faqs">
+        <?php $wp_list_table->search_box('Search FAQs', 'faqs-search'); ?>
+        <?php $wp_list_table->display(); ?>
+    </form>
 
 </div>
