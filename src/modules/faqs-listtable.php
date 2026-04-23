@@ -23,7 +23,6 @@
         $this->set_order();
         $this->set_orderby();
         $this->set_search();
-        $this->prepare_items();
     }
 
     private function get_sql_results()

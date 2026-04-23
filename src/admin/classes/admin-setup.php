@@ -16,8 +16,6 @@ class AdminSetup
     public function init()
     {
         $this->fileIncludes();
-        // add_action('admin_init', [AdminFaqsActions::get_instance(), 'maybeDeleteFaq']);
-
         add_action('admin_menu', [$this, 'menuItems']);
 
     }
@@ -37,7 +35,7 @@ class AdminSetup
     public function menuItems()
     {
 
-        add_menu_page('FAQs', 'FAQs', 'manage_options', 'faqs', [$this, 'pageAllFAQs']);
+        $MainPage = add_menu_page('FAQs', 'FAQs', 'manage_options', 'faqs', [$this, 'pageAllFAQs']);
 
         $PageB = add_submenu_page('faqs', 'All FAQs', 'All FAQs', 'manage_options', 'faqs-all-faqs', [$this, 'pageAllFAQs']);
         $PageC = add_submenu_page('', 'View FAQs', 'View FAQs', 'manage_options', 'faqs-view-faqs', [$this, 'pageSingleFAQs']);
@@ -47,6 +45,7 @@ class AdminSetup
         $PageG = add_submenu_page('', 'Edit FAQs', 'Edit FAQs', 'manage_options', 'faqs-edit-faq', [$this, 'pageEditFaqs']);
         $PageH = add_submenu_page('faqs', 'Categories', 'Categories', 'manage_options', 'faqs-categories', [$this, 'pageCategories']);
 
+        add_action('admin_print_scripts-' . $MainPage, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageB, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageC, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageD, [$this, 'adminScriptStyles']);

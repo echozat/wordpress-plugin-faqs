@@ -1,5 +1,6 @@
 <?php
 $wp_list_table = new faqs\FAQsListTable();
+$wp_list_table->prepare_items();
 
 ?>
 <div class="wrap t201plugin">
