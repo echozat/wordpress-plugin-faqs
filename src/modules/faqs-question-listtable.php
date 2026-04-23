@@ -38,7 +38,7 @@ class FAQsQuestionsListTable extends \WP_List_Table
         
         $sql_select = implode( ', ', $args );
 
-        $query = $wpdb->prepare("SELECT $sql_select FROM $faqs_questions WHERE faq_id = %d", (int) $this->faqsid);
+        $query = $wpdb->prepare("SELECT $sql_select FROM $faqs_questions WHERE faq_id = %d AND status = 1", (int) $this->faqsid);
         if ($this->search !== '') {
             $like = '%' . $wpdb->esc_like($this->search) . '%';
             $query .= $wpdb->prepare(' AND (question LIKE %s OR answer LIKE %s)', $like, $like);
@@ -101,7 +101,7 @@ class FAQsQuestionsListTable extends \WP_List_Table
             'id'         => __( 'ID' ),
             'question'          => __( 'Question' ),
             'answer'       => __( 'Answer' ),
-            'edit'   => __( 'Edit' )
+            'actions'   => __( 'Actions' )
         );
 
         return $columns;        
@@ -230,7 +230,7 @@ class FAQsQuestionsListTable extends \WP_List_Table
       foreach($items as $key => $item)
       {
             $item->answer = wp_trim_words($item->answer, 15, '...');
-            $item->edit = '<a href="'.admin_url('admin.php?page=faqs-edit-question&faqsid='.$_GET['faqsid'].'&questionid='.$item->id).'">Edit</a>';
+            $item->actions = '<span class="faqs-actions"><a href="' . admin_url('admin.php?page=faqs-edit-question&faqsid=' . (int) $this->faqsid . '&questionid=' . (int) $item->id) . '">Edit</a><span style="color:#8c8f94; margin:0 8px;">|</span><a href="#" class="faqs-delete-question" data-questionid="' . (int) $item->id . '" data-nonce="' . esc_attr(wp_create_nonce('faqs_question_delete_' . (int) $item->id)) . '">Delete</a></span>';
 
             $process_items[$key] = $item;
       }

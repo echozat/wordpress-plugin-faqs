@@ -23,9 +23,13 @@ var Think201WP = {
   post: function(FormId, options)
   {
     options = options || {};
+
     Think201WP.settings.formObj = FormId ? $(FormId) : null;
+
     if (options.beforeSend && options.beforeSend() !== true) return false;
+
     if (Think201WP.settings.formObj && Think201WP.settings.formObj.length && Validator.check(Think201WP.settings.formObj) == false) return false;
+    
     $.ajax({
       url: ajaxurl,
       type: 'post',
@@ -67,7 +71,7 @@ var Think201WP = {
       var payload = { action: options.action, nonce: nonce };
       if (!id || !nonce) return Think201WP.showError(options.invalidMessage || 'Invalid delete request.');
       payload[options.idParam || 'id'] = id;
-      
+
       Think201WP.post(null, {
         data: payload,
         beforeSend: function() { return window.confirm(options.confirmText || 'Are you sure you want to delete this item?'); },
@@ -93,6 +97,15 @@ Think201WP.bindDeleteAction({
   idParam: 'faqsid',
   confirmText: 'Are you sure you want to delete this FAQ?',
   invalidMessage: 'Invalid FAQ delete request.'
+});
+
+Think201WP.bindDeleteAction({
+  selector: '.faqs-delete-question',
+  action: 'page_delete_faq_question',
+  idKey: 'questionid',
+  idParam: 'questionid',
+  confirmText: 'Are you sure you want to delete this FAQ question?',
+  invalidMessage: 'Invalid FAQ question delete request.'
 });
 
 
