@@ -18,6 +18,7 @@
    }
 
    $wp_list_table = new faqs\FAQsQuestionsListTable($faqsid);
+   $wp_list_table->prepare_items();
 
    // get faqs details
    $FAQ = faqs\FAQsData::getFaqsDetail($faqsid);
@@ -27,8 +28,11 @@
       <?php echo $FAQ->name; ?> | FAQ 
       <a href="<?php print admin_url('admin.php?page=faqs-add-question&faqsid='. $faqsid); ?>" class="add-new-h2">Add Question</a>
     </h2>   
-<?php
-$wp_list_table->display();
-?>
+<form method="get">
+   <input type="hidden" name="page" value="faqs-view-faqs">
+   <input type="hidden" name="faqsid" value="<?php echo (int) $faqsid; ?>">
+   <?php $wp_list_table->search_box('Search Questions', 'faqs-questions-search'); ?>
+   <?php $wp_list_table->display(); ?>
+</form>
 
 </div>

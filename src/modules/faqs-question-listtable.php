@@ -11,6 +11,7 @@ class FAQsQuestionsListTable extends \WP_List_Table
     private $order;
     private $faqsid;
     private $orderby;
+    private $search = '';
     private $items_per_page = 5;
 
     public function __construct($faqsid)
@@ -24,7 +25,7 @@ class FAQsQuestionsListTable extends \WP_List_Table
         $this->faqsid = $faqsid;
         $this->set_order();
         $this->set_orderby();
-        $this->prepare_items();
+        $this->set_search();
     }
 
     private function get_sql_results()
@@ -37,9 +38,12 @@ class FAQsQuestionsListTable extends \WP_List_Table
         
         $sql_select = implode( ', ', $args );
 
-        $query = "SELECT $sql_select
-                  FROM $faqs_questions WHERE faq_id = $this->faqsid
-                    ORDER BY $this->orderby $this->question_order ";
+        $query = $wpdb->prepare("SELECT $sql_select FROM $faqs_questions WHERE faq_id = %d", (int) $this->faqsid);
+        if ($this->search !== '') {
+            $like = '%' . $wpdb->esc_like($this->search) . '%';
+            $query .= $wpdb->prepare(' AND (question LIKE %s OR answer LIKE %s)', $like, $like);
+        }
+        $query .= " ORDER BY $this->orderby $this->order";
 
         $sql_results = $wpdb->get_results($query);
 
@@ -48,18 +52,20 @@ class FAQsQuestionsListTable extends \WP_List_Table
 
     public function set_order()
     {
-        $order = 'ASC';
-        if ( isset( $_GET['order'] ) AND $_GET['order'] )
-            $order = $_GET['order'];
-        $this->order = esc_sql( $order );
+        $order = (isset($_GET['order']) && $_GET['order']) ? strtoupper(sanitize_text_field(wp_unslash($_GET['order']))) : 'ASC';
+        $this->order = in_array($order, ['ASC', 'DESC'], true) ? $order : 'ASC';
     }
 
     public function set_orderby()
     {
-        $orderby = 'created_at';
-        if ( isset( $_GET['orderby'] ) AND $_GET['orderby'] )
-            $orderby = $_GET['orderby'];
-        $this->orderby = esc_sql( $orderby );
+        $orderby = (isset($_GET['orderby']) && $_GET['orderby']) ? sanitize_text_field(wp_unslash($_GET['orderby'])) : 'id';
+        $allowed = ['id', 'question', 'answer', 'question_order', 'created_at'];
+        $this->orderby = in_array($orderby, $allowed, true) ? $orderby : 'id';
+    }
+
+    public function set_search()
+    {
+        $this->search = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
     }
 
     /**
