@@ -36,6 +36,7 @@
 
         $query = "SELECT $sql_select
                   FROM $faqs_details
+                  WHERE status = 1
                	  ORDER BY $this->orderby $this->order ";
 
         $sql_results = $wpdb->get_results($query);
@@ -98,6 +99,7 @@
             //'icon'       => __( 'Icon' ),
             'function' => __('Function'),
             'edit'     => __('Edit'),
+            'delete'   => __('Delete'),
         ];
 
         return $columns;
@@ -234,6 +236,7 @@
                         }
 
                         $item->edit = '<a href="' . admin_url('admin.php?page=faqs-edit-faq&faqsid=' . $item->id) . '">Edit</a>';
+            $item->delete = '<a href="#" class="submitdelete faqs-delete-faq" data-faqsid="' . (int) $item->id . '" data-nonce="' . esc_attr(wp_create_nonce('faqs_delete_' . (int) $item->id)) . '">Delete</a>';
 
                         $process_items[$key] = $item;
                     }

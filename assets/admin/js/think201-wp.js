@@ -45,9 +45,54 @@ var Think201WP = {
         $('.think201-wp-msg-error').fadeIn(1000).siblings('.think201-wp-msg').hide();
       }                        
     }); 
+  },
+
+  deleteFaq: function(button)
+  {
+    var $button = $(button);
+    var faqId = parseInt($button.data('faqsid'), 10);
+    var nonce = $button.data('nonce');
+
+    if (!faqId || !nonce) {
+      $('.think201-wp-msg-error p').html('Invalid FAQ delete request.');
+      $('.think201-wp-msg-error').fadeIn(1000).siblings('.think201-wp-msg').hide();
+      return false;
+    }
+
+    if (!window.confirm('Are you sure you want to delete this FAQ?')) {
+      return false;
+    }
+
+    $.ajax({
+      url: ajaxurl,
+      type: 'post',
+      data: { action: 'page_delete_faq', faqsid: faqId, nonce: nonce },
+      success: function(data) {
+        if (data.status == true) {
+          $('.think201-wp-msg-success p').html(data.msg);
+          $('.think201-wp-msg-success').fadeIn(1000).siblings('.think201-wp-msg').hide();
+          setTimeout(function() { window.location.reload(); }, 250);
+          return;
+        }
+
+        $('.think201-wp-msg-error p').html(data.msg || 'Oops, there seems to be some issue.');
+        $('.think201-wp-msg-error').fadeIn(1000).siblings('.think201-wp-msg').hide();
+      },
+      error: function() {
+        $('.think201-wp-msg-error p').html('Oops, there seems to be some issue.');
+        $('.think201-wp-msg-error').fadeIn(1000).siblings('.think201-wp-msg').hide();
+      }
+    });
+
+    return false;
   }
 };
 
 window.Think201WP = Think201WP;
+
+$(document).on('click', '.faqs-delete-faq', function(e) {
+  e.preventDefault();
+  Think201WP.deleteFaq(this);
+});
 
 

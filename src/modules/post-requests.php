@@ -8,6 +8,7 @@ namespace faqs;
 add_action('wp_ajax_page_add_new_faqs', array('faqs\PostData', 'addNewFAQs'));
 add_action('wp_ajax_page_add_new_category', array('faqs\PostData', 'addNewCategory'));
 add_action('wp_ajax_page_add_faqs_question', array('faqs\PostData', 'addNewFAQsQuestion'));
+add_action('wp_ajax_page_delete_faq', array('faqs\PostData', 'deleteFaq'));
 
 
 class PostData
@@ -178,6 +179,33 @@ class PostData
 		$response = array('status' => true, 'msg' => 'Successfully added');
 		
 		wp_send_json($response);		
+	}
+
+	public static function deleteFaq()
+	{
+		if (! current_user_can('manage_options')) {
+			wp_send_json(array('status' => false, 'msg' => 'You are not allowed to delete FAQs.'));
+		}
+
+		$faq_id = isset($_POST['faqsid']) ? (int) $_POST['faqsid'] : 0;
+		$nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+
+		if ($faq_id <= 0 || ! wp_verify_nonce($nonce, 'faqs_delete_' . $faq_id)) {
+			wp_send_json(array('status' => false, 'msg' => 'Invalid delete request.'));
+		}
+
+		global $wpdb;
+		$faqs_details = $wpdb->prefix . 'faqs_details';
+		$faqs_questions = $wpdb->prefix . 'faqs_questions';
+
+		$details_result = $wpdb->update($faqs_details, array('status' => 0), array('id' => $faq_id), array('%d'), array('%d'));
+		$questions_result = $wpdb->update($faqs_questions, array('status' => 0), array('faq_id' => $faq_id), array('%d'), array('%d'));
+
+		if (false === $details_result || false === $questions_result) {
+			wp_send_json(array('status' => false, 'msg' => 'Unable to delete FAQ. Please try again.'));
+		}
+
+		wp_send_json(array('status' => true, 'msg' => 'FAQ deleted successfully.'));
 	}
 
 	public static function getCategoryData()

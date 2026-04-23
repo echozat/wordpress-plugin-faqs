@@ -16,6 +16,7 @@ class AdminSetup
     public function init()
     {
         $this->fileIncludes();
+        // add_action('admin_init', [AdminFaqsActions::get_instance(), 'maybeDeleteFaq']);
 
         add_action('admin_menu', [$this, 'menuItems']);
 
@@ -35,18 +36,17 @@ class AdminSetup
 
     public function menuItems()
     {
-        add_menu_page('FAQs', 'FAQs', 'manage_options', 'faqs', [$this, 'pageDashboard']);
 
-        $PageA = add_submenu_page('faqs', 'Dashboard', 'Dashboard', 'manage_options', 'faqs', [$this, 'pageDashboard']);
+        add_menu_page('FAQs', 'FAQs', 'manage_options', 'faqs', [$this, 'pageAllFAQs']);
+
         $PageB = add_submenu_page('faqs', 'All FAQs', 'All FAQs', 'manage_options', 'faqs-all-faqs', [$this, 'pageAllFAQs']);
-        $PageC = add_submenu_page("", 'View FAQs', 'View FAQs', 'manage_options', 'faqs-view-faqs', [$this, 'pageSingleFAQs']);
-        $PageD = add_submenu_page("", 'Create Faqs', 'Create Faqs', 'manage_options', 'faqs-create-faqs', [$this, 'pageCreateFaqs']);
-        $PageE = add_submenu_page("", 'Add Question', 'Add Question', 'manage_options', 'faqs-add-question', [$this, 'pageAddQuestion']);
-        $PageF = add_submenu_page("", 'Edit Question', 'Edit Question', 'manage_options', 'faqs-edit-question', [$this, 'pageEditQuestion']);
-        $PageG = add_submenu_page("", 'Edit FAQs', 'Edit FAQs', 'manage_options', 'faqs-edit-faq', [$this, 'pageEditFaqs']);
+        $PageC = add_submenu_page('', 'View FAQs', 'View FAQs', 'manage_options', 'faqs-view-faqs', [$this, 'pageSingleFAQs']);
+        $PageD = add_submenu_page('', 'Create Faqs', 'Create Faqs', 'manage_options', 'faqs-create-faqs', [$this, 'pageCreateFaqs']);
+        $PageE = add_submenu_page('', 'Add Question', 'Add Question', 'manage_options', 'faqs-add-question', [$this, 'pageAddQuestion']);
+        $PageF = add_submenu_page('', 'Edit Question', 'Edit Question', 'manage_options', 'faqs-edit-question', [$this, 'pageEditQuestion']);
+        $PageG = add_submenu_page('', 'Edit FAQs', 'Edit FAQs', 'manage_options', 'faqs-edit-faq', [$this, 'pageEditFaqs']);
         $PageH = add_submenu_page('faqs', 'Categories', 'Categories', 'manage_options', 'faqs-categories', [$this, 'pageCategories']);
 
-        add_action('admin_print_scripts-' . $PageA, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageB, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageC, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageD, [$this, 'adminScriptStyles']);
@@ -54,6 +54,9 @@ class AdminSetup
         add_action('admin_print_scripts-' . $PageF, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageG, [$this, 'adminScriptStyles']);
         add_action('admin_print_scripts-' . $PageH, [$this, 'adminScriptStyles']);
+
+        add_filter('parent_file', [$this, 'setMenuParent']);
+        add_filter('submenu_file', [$this, 'setSubmenuFile']);
 
     }
 
@@ -67,6 +70,26 @@ class AdminSetup
             wp_localize_script('faqs-ajax-request', 'FAQSAjax', ['ajaxurl' => plugins_url('admin-ajax.php')]);
             wp_enqueue_style('faqs-admin', FAQ_PLUGIN_URL . 'build/css/admin.css', [], FAQS_VERSION, 'all');
         }
+    }
+
+    private function isHiddenFaqPage()
+    {
+        $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+        return in_array($page, ['faqs-view-faqs', 'faqs-create-faqs', 'faqs-add-question', 'faqs-edit-question', 'faqs-edit-faq'], true);
+    }
+
+    public function setMenuParent($parent_file)
+    {
+        if ($this->isHiddenFaqPage()) {
+            return 'faqs';
+        }
+
+        return $parent_file;
+    }
+
+    public function setSubmenuFile($submenu_file)
+    {
+        return $this->isHiddenFaqPage() ? 'faqs-all-faqs' : $submenu_file;
     }
 
     public function pageDashboard()
