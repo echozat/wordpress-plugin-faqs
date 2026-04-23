@@ -99,8 +99,7 @@
             'name'     => __('Name'),
             //'icon'       => __( 'Icon' ),
             'function' => __('Function'),
-            'edit'     => __('Edit'),
-            'delete'   => __('Delete'),
+            'actions'  => __('Actions'),
         ];
 
         return $columns;
@@ -236,8 +235,7 @@
                             $item->function = ob_get_clean();
                         }
 
-                        $item->edit   = '<a href="' . admin_url('admin.php?page=faqs-edit-faq&faqsid=' . $item->id) . '">Edit</a>';
-                        $item->delete = '<a href="#" class="submitdelete faqs-delete-faq" data-faqsid="' . (int) $item->id . '" data-nonce="' . esc_attr(wp_create_nonce('faqs_delete_' . (int) $item->id)) . '">Delete</a>';
+                        $item->actions = '<span class="faqs-actions"><a href="' . admin_url('admin.php?page=faqs-edit-faq&faqsid=' . $item->id) . '">Edit</a><span style="color:#8c8f94; margin:0 8px;">|</span><a href="#" class="submitdelete faqs-delete-faq" data-faqsid="' . (int) $item->id . '" data-nonce="' . esc_attr(wp_create_nonce('faqs_delete_' . (int) $item->id)) . '">Delete</a></span>';
 
                         $process_items[$key] = $item;
                     }
