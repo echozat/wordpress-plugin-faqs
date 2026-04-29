@@ -78,7 +78,7 @@
                               $selected = '';
                            }
                         ?>
-                           <option <?php echo $selected; ?> value="<?php echo $category->id; ?>"><?php echo $category->name; ?></option>                       
+                           <option <?php echo $selected; ?> value="<?php echo $category->id; ?>"><?php echo $category->cat_name; ?></option>                       
                         <?php
                         }
                         ?>
